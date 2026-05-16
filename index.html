@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI Agent | AI-Powered Business Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.2.2/wordcloud2.min.js"></script>
+    <meta name="description" content="AI-Powered Business Intelligence Agent with Sentiment Analysis and Interactive Dashboard.">
+</head>
+<body>
+    <!-- Background Animated Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">📊</span>
+                <span class="logo-text">BI Agent</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard">Dashboard</a>
+                <a href="#" class="nav-item" id="nav-chat">AI Chatbot</a>
+                <a href="#" class="nav-item" id="nav-wordcloud">Word Cloud</a>
+                <a href="#" class="nav-item" id="nav-rate">Rate this UI</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>v2.0 Beta</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Business Intelligence Overview</h1>
+                <div class="user-profile">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Agent Online</span>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <section id="dashboard-view" class="view active">
+                <div class="kpi-grid">
+                    <div class="kpi-card glass">
+                        <div class="kpi-title">Total Reviews</div>
+                        <div class="kpi-value" id="kpi-total">-</div>
+                        <div class="kpi-trend pos">↑ 12% vs last month</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <div class="kpi-title">Avg. Rating</div>
+                        <div class="kpi-value" id="kpi-rating">-</div>
+                        <div class="kpi-stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <div class="kpi-title">Sentiment Score</div>
+                        <div class="kpi-value" id="kpi-sentiment">-</div>
+                        <div class="kpi-label">Across all products</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <div class="kpi-title">Positive Reviews</div>
+                        <div class="kpi-value" id="kpi-positive">-</div>
+                        <div class="kpi-progress">
+                            <div class="progress-bar" id="kpi-pos-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container glass large">
+                        <h3>Sentiment Trend Over Time</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                    <div class="chart-container glass">
+                        <h3>Sentiment Distribution</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <div class="chart-container glass">
+                        <h3>Rating Distribution</h3>
+                        <canvas id="ratingChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat View -->
+            <section id="chat-view" class="view">
+                <div class="chat-wrapper glass">
+                    <div style="display: flex; justify-content: flex-end; padding: 16px 24px 0;">
+                        <button id="export-pdf-btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.2s;">📥 Export Chat PDF</button>
+                    </div>
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            <div class="message-content">
+                                Hello! I am your AI Business Intelligence Agent. How can I help you analyze your data today?
+                            </div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <button id="mic-btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); border-radius: 12px; width: 48px; height: 48px; font-size: 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;" title="Voice to Text">🎙️</button>
+                        <input type="text" id="chat-input" placeholder="Ask about sentiment, complaints, or search products..." autocomplete="off">
+                        <button id="send-btn">Send</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Word Cloud View -->
+            <section id="wordcloud-view" class="view">
+                <div class="glass" style="height: calc(100vh - 220px); display: flex; flex-direction: column;">
+                    <h2 style="margin-bottom: 8px;">Customer Theme Cloud</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Visual representation of the most frequent themes and keywords across all reviews.</p>
+                    <div style="flex-grow: 1; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 20px;">
+                        <div id="wordcloud-canvas" style="width: 800px; height: 500px; position: relative;"></div>
+                        <div id="wordcloud-loading" style="color: var(--text-secondary); position: absolute;">Loading visual data...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rate UI View -->
+            <section id="rate-view" class="view">
+                <div class="rate-wrapper glass" style="max-width: 600px; margin: 0 auto;">
+                    <h2 style="margin-bottom: 20px;">Rate this UI</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 30px;">Let us know what you think about the new premium design.</p>
+                    
+                    <div class="star-rating" id="star-rating" style="font-size: 40px; cursor: pointer; margin-bottom: 24px;">
+                        <span data-value="1">★</span>
+                        <span data-value="2">★</span>
+                        <span data-value="3">★</span>
+                        <span data-value="4">★</span>
+                        <span data-value="5">★</span>
+                    </div>
+                    
+                    <textarea id="rate-comment" rows="5" placeholder="Leave a comment about the UI..." style="width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 16px; color: white; outline: none; margin-bottom: 24px; font-family: inherit; font-size: 15px; resize: vertical;"></textarea>
+                    
+                    <button id="rate-submit-btn" style="background: linear-gradient(135deg, var(--accent-start), var(--accent-end)); color: white; border: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); transition: all 0.2s;">Submit Feedback</button>
+                    
+                    <div id="rate-message" style="margin-top: 20px; font-weight: 500; text-align: center; display: none;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
